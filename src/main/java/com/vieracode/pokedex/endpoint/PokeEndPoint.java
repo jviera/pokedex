@@ -64,36 +64,27 @@ public class PokeEndPoint {
     public AbilitiesResponse abilities(@RequestPayload AbilitiesRequest request) {
         AbilitiesResponse response = new AbilitiesResponse();
         response.setAbilities(new ListType());
-        try {           
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+        try {
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
-            
             for (Ability ability : pokemon.getBody().getAbilities()) {
                 response.getAbilities().getChild().add(ability.getAbility().getName());
-                
             }
-            
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
-    }      
-    
+    }
+
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "BaseExperienceRequest")
     public BaseExperienceResponse baseExperience(@RequestPayload BaseExperienceRequest request) {
         BaseExperienceResponse response = new BaseExperienceResponse();
         try {
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
-            response.setBaseExperience(pokemon.getBody().getBaseExperience());            
+            response.setBaseExperience(pokemon.getBody().getBaseExperience());
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
@@ -105,68 +96,56 @@ public class PokeEndPoint {
         HeldItemsResponse response = new HeldItemsResponse();
         response.setHeldItems(new ListType());
         try {
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             for (HeldItem heldItem : pokemon.getBody().getHeldItems()) {
                 response.getHeldItems().getChild().add(heldItem.getItem().getName());
             }
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
     }
-    
+
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "IdRequest")
     public IdResponse id(@RequestPayload IdRequest request) {
         IdResponse response = new IdResponse();
         try {
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setId(pokemon.getBody().getId());
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
     }
-    
+
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "NameRequest")
     public NameResponse name(@RequestPayload NameRequest request) {
         NameResponse response = new NameResponse();
         try {
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setName(pokemon.getBody().getName());
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
     }
-    
+
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "LocationAreaEncountersRequest")
     public LocationAreaEncountersResponse locationAreaEncounters(@RequestPayload LocationAreaEncountersRequest request) {
         LocationAreaEncountersResponse response = new LocationAreaEncountersResponse();
         try {
-            String url = BASE_URL + request.getName();
-            System.out.println("url: "+url);
-            URI uri = new URI(url);
+            URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setLocationAreaEncounters(pokemon.getBody().getLocationAreaEncounters());
         } catch (Exception e) {
-            System.out.println("----------------> se genero un error!");
             e.printStackTrace();
         }
         return response;
-    }    
+    }
 }
