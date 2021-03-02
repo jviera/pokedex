@@ -8,6 +8,7 @@ package com.vieracode.pokedex.endpoint;
 import com.vieracode.pokedex.schema.Ability;
 import com.vieracode.pokedex.schema.HeldItem;
 import com.vieracode.pokedex.schema.Pokemon;
+import com.vieracode.pokedex.util.StackTraceUtil;
 import com.vieracode.pokedex.xml.school.AbilitiesRequest;
 import com.vieracode.pokedex.xml.school.AbilitiesResponse;
 import com.vieracode.pokedex.xml.school.BaseExperienceRequest;
@@ -22,6 +23,7 @@ import com.vieracode.pokedex.xml.school.LocationAreaEncountersResponse;
 import com.vieracode.pokedex.xml.school.NameRequest;
 import com.vieracode.pokedex.xml.school.NameResponse;
 import java.net.URI;
+import java.net.URISyntaxException;
 import javax.annotation.PostConstruct;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -33,6 +35,9 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 
 /**
  *
@@ -41,6 +46,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class PokeEndPoint {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PokeEndPoint.class);
     private static final String NAMESPACE_URI = "http://www.pokedex.vieracode.com/xml/school";
     private static final String BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
     private RestTemplate restTemplate;
@@ -55,7 +61,7 @@ public class PokeEndPoint {
             requestFactory.setHttpClient(httpClient);
             restTemplate = new RestTemplate(requestFactory);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
     }
 
@@ -71,7 +77,7 @@ public class PokeEndPoint {
                 response.getAbilities().getChild().add(ability.getAbility().getName());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
@@ -84,8 +90,8 @@ public class PokeEndPoint {
             URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setBaseExperience(pokemon.getBody().getBaseExperience());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | RestClientException e) {
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
@@ -101,8 +107,8 @@ public class PokeEndPoint {
             for (HeldItem heldItem : pokemon.getBody().getHeldItems()) {
                 response.getHeldItems().getChild().add(heldItem.getItem().getName());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | RestClientException e) {
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
@@ -115,8 +121,8 @@ public class PokeEndPoint {
             URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setId(pokemon.getBody().getId());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | RestClientException e) {
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
@@ -129,8 +135,8 @@ public class PokeEndPoint {
             URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setName(pokemon.getBody().getName());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | RestClientException e) {
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
@@ -143,8 +149,8 @@ public class PokeEndPoint {
             URI uri = new URI(BASE_URL + request.getName());
             ResponseEntity<Pokemon> pokemon = restTemplate.getForEntity(uri, Pokemon.class);
             response.setLocationAreaEncounters(pokemon.getBody().getLocationAreaEncounters());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | RestClientException e) {
+            LOG.error(StackTraceUtil.getStackTrace(e));
         }
         return response;
     }
